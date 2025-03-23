@@ -113,6 +113,11 @@ def get_rss():
             time.sleep(RETRY_INTERVAL)
 
 
+def truncate_text(text, length=140):
+    """ Begrens tekstlengde til 140 tegn og legg til '...' hvis den kuttes av """
+    return text if len(text) <= length else text[:length - 3] + "..."
+
+
 feed = None
 
 
@@ -129,29 +134,40 @@ def draw():
     graphics.clear()
     graphics.set_pen(0)
 
-    if len(feed) > 0:
-        # Sett lik skriftstørrelse for begge overskriftene
+    if len(feed) > 2:
+        # Sett lik skriftstørrelse for alle overskriftene
         title_size = 3 if graphics.measure_text(feed[0]["title"]) < WIDTH - 130 else 2
 
         # Første nyhet (øverst) - QR-kode til høyre
         graphics.set_pen(4)
-        graphics.text(feed[0]["title"], 10, 10, WIDTH - 130, title_size)
+        graphics.text(truncate_text(feed[0]["title"]), 10, 10, WIDTH - 130, title_size)
         graphics.set_pen(3)
-        graphics.text(feed[0]["description"], 10, 70, WIDTH - 130, 2)
+        graphics.text(truncate_text(feed[0]["description"]), 10, 50, WIDTH - 130, 2)
 
         code.set_text(feed[0]["link"])
         draw_qr_code(WIDTH - 110, 10, 100, code)  # QR-kode øverst til høyre
 
-        graphics.line(10, 170, WIDTH - 10, 170)  # Linje mellom nyhetene
+        graphics.line(10, 140, WIDTH - 10, 140)  # Linje mellom nyhetene
 
-        # Andre nyhet (nederst) - QR-kode til venstre
+        # Andre nyhet (midten) - QR-kode til venstre
         graphics.set_pen(4)
-        graphics.text(feed[1]["title"], 130, 190, WIDTH - 140, title_size)
+        graphics.text(truncate_text(feed[1]["title"]), 130, 150, WIDTH - 140, title_size)
         graphics.set_pen(3)
-        graphics.text(feed[1]["description"], 130, 250, WIDTH - 140, 2)
+        graphics.text(truncate_text(feed[1]["description"]), 130, 190, WIDTH - 140, 2)
 
         code.set_text(feed[1]["link"])
-        draw_qr_code(10, 190, 100, code)  # QR-kode nede til venstre
+        draw_qr_code(10, 150, 100, code)  # QR-kode i midten til venstre
+
+        graphics.line(10, 280, WIDTH - 10, 280)  # Linje mellom nyhetene
+
+        # Tredje nyhet (nederst) - QR-kode til høyre
+        graphics.set_pen(4)
+        graphics.text(truncate_text(feed[2]["title"]), 10, 290, WIDTH - 130, title_size)
+        graphics.set_pen(3)
+        graphics.text(truncate_text(feed[2]["description"]), 10, 330, WIDTH - 130, 2)
+
+        code.set_text(feed[2]["link"])
+        draw_qr_code(WIDTH - 110, 290, 100, code)  # QR-kode nederst til høyre
 
     else:
         graphics.set_pen(4)
