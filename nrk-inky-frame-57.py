@@ -130,29 +130,28 @@ def draw():
     graphics.set_pen(0)
 
     if len(feed) > 0:
+        # Sett lik skriftstørrelse for begge overskriftene
+        title_size = 3 if graphics.measure_text(feed[0]["title"]) < WIDTH - 130 else 2
 
-        graphics.set_pen(graphics.create_pen(0, 100, 200))
-        graphics.rectangle(0, 0, WIDTH, 40)
-        graphics.set_pen(1)
-        graphics.text("NRK Toppnyheter:", 10, 10, 320, 3)
-
+        # Første nyhet (øverst) - QR-kode til høyre
         graphics.set_pen(4)
-        graphics.text(feed[0]["title"], 10, 70, WIDTH - 150, 3 if graphics.measure_text(feed[0]["title"]) < WIDTH else 2)
-        graphics.text(feed[1]["title"], 130, 260, WIDTH - 140, 3 if graphics.measure_text(feed[1]["title"]) < WIDTH else 2)
-
+        graphics.text(feed[0]["title"], 10, 10, WIDTH - 130, title_size)
         graphics.set_pen(3)
-        graphics.text(feed[0]["description"], 10, 135 if graphics.measure_text(feed[0]["title"]) < 650 else 90, WIDTH - 150, 2)
-        graphics.text(feed[1]["description"], 130, 320 if graphics.measure_text(feed[1]["title"]) < 650 else 340, WIDTH - 145, 2)
-
-        graphics.line(10, 215, WIDTH - 10, 215)
+        graphics.text(feed[0]["description"], 10, 70, WIDTH - 130, 2)
 
         code.set_text(feed[0]["link"])
-        draw_qr_code(WIDTH - 110, 65, 100, code)
-        code.set_text(feed[1]["link"])
-        draw_qr_code(10, 265, 100, code)
+        draw_qr_code(WIDTH - 110, 10, 100, code)  # QR-kode øverst til høyre
 
-        graphics.set_pen(graphics.create_pen(0, 100, 200))
-        graphics.rectangle(0, HEIGHT - 20, WIDTH, 20)
+        graphics.line(10, 170, WIDTH - 10, 170)  # Linje mellom nyhetene
+
+        # Andre nyhet (nederst) - QR-kode til venstre
+        graphics.set_pen(4)
+        graphics.text(feed[1]["title"], 130, 190, WIDTH - 140, title_size)
+        graphics.set_pen(3)
+        graphics.text(feed[1]["description"], 130, 250, WIDTH - 140, 2)
+
+        code.set_text(feed[1]["link"])
+        draw_qr_code(10, 190, 100, code)  # QR-kode nede til venstre
 
     else:
         graphics.set_pen(4)
