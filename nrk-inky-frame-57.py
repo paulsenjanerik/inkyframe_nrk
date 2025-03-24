@@ -113,8 +113,8 @@ def get_rss():
             time.sleep(RETRY_INTERVAL)
 
 
-def truncate_text(text, length=140):
-    """ Begrens tekstlengde til 140 tegn og legg til '...' hvis den kuttes av """
+def truncate_text(text, length=160):
+    """ Begrens tekstlengde til 160 tegn og legg til '...' hvis den kuttes av """
     return text if len(text) <= length else text[:length - 3] + "..."
 
 
@@ -177,3 +177,5 @@ def draw():
         graphics.text("Sjekk nettverksinnstillingene.", 5, (HEIGHT // 2) + 2, WIDTH, 2)
 
     graphics.update()
+
+
